@@ -1,63 +1,280 @@
+<!--<!DOCTYPE html>-->
+
+<!--<html lang='en'>-->
+<!--    <head>-->
+<!--        <meta charset='utf-8' />-->
+<!--        <link rel='stylesheet' href='https://unpkg.com/leaflet@1.5.1/dist/leaflet.css'/>-->
+
+<!--        <title>Atlanta Urban Geographies</title>-->
+
+<!--        <style>-->
+<!--            body,-->
+<!--            #map {-->
+<!--                position: absolute;-->
+<!--                width: 100%;-->
+<!--                top: 0;-->
+<!--                bottom: 0;-->
+<!--                margin: 0;-->
+<!--                padding: 0;-->
+<!--                background: rgba(0, 0, 0, 0.75);-->
+<!--            }-->
+<!--        </style>-->
+<!--    </head>-->
+
+<!--    <body>-->
+<!--        <div id='map'></div>-->
+
+<!--        <script src='https://unpkg.com/leaflet@1.5.1/dist/leaflet.js'></script>-->
+<!--        <script src='https://d3js.org/d3.v5.min.js'></script>-->
+
+<!--        <script>-->
+<!--            const options = {-->
+<!--                center: [33.726, -84.365],-->
+<!--                zoom: 9,-->
+<!--                minZoom: 9,-->
+<!--                maxZoom: 16,-->
+<!--                maxBounds: [[33.911, -84.032], [33.62, -84.772]]-->
+<!--            };-->
+
+<!--            const map = L.map('map', options);-->
+
+<!--            // polygon styling options-->
+<!--            const urbanOptions = {-->
+<!--                color: '#295b97',-->
+<!--                weight: 0-->
+<!--            };-->
+
+<!--            const cityLimitsOptions = {-->
+<!--                fillOpacity: 0,-->
+<!--                color: '#040d18',-->
+<!--                opacity: 1,-->
+<!--                weight: 3-->
+<!--            };-->
+
+<!--            const neighborhoodOptions = {-->
+<!--                fillOpacity: 0.3,-->
+<!--                fillColor: '#e0ecf9',-->
+<!--                color: '#151f2b',-->
+<!--                weight: 1.7,-->
+<!--                opacity: 1-->
+<!--            };-->
+
+<!--            const subwayOptions = {-->
+<!--                color: '#ff6e00',-->
+<!--                weight: 2,-->
+<!--                opacity: 1-->
+<!--            };-->
+
+<!--            const busOptions = {-->
+<!--                color: '#f0f062',-->
+<!--                weight: 0.1,-->
+<!--                opacity: 1-->
+<!--            };-->
+
+<!--            const tramOptions = {-->
+<!--                color: '#ff6e00',-->
+<!--                weight: 2-->
+<!--            };-->
+
+<!--            const otherRoutes = {-->
+<!--                color: '#ff6e00'-->
+<!--            };-->
+
+<!--            // L.tileLayer(-->
+<!--            //     'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',-->
+<!--            //     {-->
+<!--            //         attribution:-->
+<!--            //             '&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> &copy; <a href='http://cartodb.com/attributions'>CartoDB</a>',-->
+<!--            //         subdomains: 'abcd',-->
+<!--            //         maxZoom: 19-->
+<!--            //     }-->
+<!--            // ).addTo(map);-->
+
+<!--            // deferred requests for all the data files-->
+<!--            const urbanAreasJson = d3.json('data/atlanta-urban.json');-->
+<!--            const cityLimitsJson = d3.json('data/city-limits.json');-->
+<!--            const neighborhoodsJson = d3.json('data/neighborhoods-filtered-1.json');-->
+<!--            const transitRoutesJson = d3.json('data/transit-routes-simp.json');-->
+
+<!--            // function drawMap(json) {-->
+<!--            //     L.geoJson(json).addTo(map);-->
+<!--            // }-->
+
+<!--            function drawMap(urbanAreasJson, cityLimitsJson, neighborhoodsJson, transitRoutesJson) {-->
+<!--                L.geoJson(urbanAreasJson, {style: urbanOptions}).addTo(map);-->
+<!--                L.geoJson(cityLimitsJson, {style: cityLimitsOptions}).addTo(map);-->
+<!--                L.geoJson(neighborhoodsJson, {style: neighborhoodOptions}).addTo(map);-->
+<!--                L.geoJson(transitRoutesJson, { style: (feature) => {-->
+<!--                    console.log(feature);-->
+<!--                    let type = feature.properties.rte_type;-->
+<!--                    console.log(type);-->
+<!--                    if (type) {-->
+<!--                        return type === 'SUBWAY' ? subwayOptions :-->
+<!--                            type === 'Bus' ? busOptions :-->
+<!--                                type === 'TRAM' ? tramOptions :-->
+<!--                                    otherRoutes;-->
+<!--                    }-->
+<!--                  }-->
+<!--                }).addTo(map);-->
+<!--            }-->
+
+
+<!--            //-->
+<!--            // function styleJson(json) {-->
+<!--            //     console.log(json);-->
+<!--            //     if (json === urbanAreasJson) {-->
+<!--            //         console.log(urbanOptions);-->
+<!--            //         return urbanOptions;-->
+<!--            //     } else if (json === cityLimitsJson) {-->
+<!--            //         return cityLimitsOptions;-->
+<!--            //     } else if (json === neighborhoodsJson) {-->
+<!--            //         return neighborhoodOptions;-->
+<!--            //     } else if (json === transitRoutesJson) {-->
+<!--            //         return otherRoutes;-->
+<!--            //     }-->
+<!--            // }-->
+
+<!--            // function drawMap(urbanAreasJson, cityLimitsJson, neighborhoodsJson, transitRoutesJson) {-->
+<!--            //     L.geoJson(urbanAreasJson, { style: urbanOptions }).addTo(map);-->
+<!--            //     L.geoJson(cityLimitsJson, { style: cityLimitsOptions }).addTo(map);-->
+<!--            //     L.geoJson(neighborhoodsJson).addTo(map);-->
+<!--            //     L.geoJson(transitRoutesJson, {-->
+<!--            //         // style each feature-->
+<!--            //         style: function(feature) {-->
+<!--            //             // shortcut to variable-->
+<!--            //             let type = feature.properties.type;-->
+<!--            //-->
+<!--            //             // assign options-->
+<!--            //             return type === 'SUBWAY'-->
+<!--            //                 ? subwayOptions-->
+<!--            //                 : type === 'Bus'-->
+<!--            //                     ? busOptions-->
+<!--            //                     : type === 'TRAM'-->
+<!--            //                         ? tramOptions-->
+<!--            //                         : otherRoutes;-->
+<!--            //         }-->
+<!--            //     }).addTo(map);            }-->
+
+
+<!--            // when they're all loaded and available, send data to drawMap function-->
+<!--            Promise.all([urbanAreasJson, cityLimitsJson, neighborhoodsJson, transitRoutesJson]).then(drawMap);-->
+<!--        </script>-->
+<!--    </body>-->
+<!--</html>-->
+
+
+
+
+
 <!DOCTYPE html>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
 
-        <title>HTML5 Template</title>
+    <title>Atlanta Urban Geographies</title>
+    <link
+            rel='stylesheet'
+            href='https://unpkg.com/leaflet@1.3.1/dist/leaflet.css'
+    />
+    <style>
+        body,
+        #map {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            bottom: 0;
+            margin: 0;
+            padding: 0;
+            background: rgba(0, 0, 0, 0.75);
+        }
+    </style>
+</head>
 
-        <style>
-            body,
-            #map {
-                position: absolute;
-                width: 100%;
-                top: 0;
-                bottom: 0;
+<body>
+<div id='map'></div>
+
+<script src='https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'></script>
+<script
+        src='https://code.jquery.com/jquery-3.2.1.min.js'
+        integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4='
+        crossorigin='anonymous'
+></script>
+<script>
+    const options = {
+        center: [33.726, -84.365],
+        zoom: 9,
+        minZoom: 9,
+        maxZoom: 16,
+        maxBounds: [[33.911, -84.032], [33.62, -84.772]]
+    };
+    const map = L.map('map', options);
+
+    // styling options
+    const urbanOptions = {
+        color: '#295b97',
+        weight: 0
+    };
+
+    const cityLimitsOptions = {
+        fillOpacity: 0,
+        color: '#040d18',
+        opacity: 1,
+        weight: 3
+    };
+
+    const neighborhoodOptions = {
+        fillOpacity: 0.3,
+        fillColor: '#e0ecf9',
+        color: '#151f2b',
+        weight: 1.7,
+        opacity: 1
+    };
+
+    const subwayOptions = {
+        color: '#ff6e00',
+        weight: 2,
+        opacity: 1
+    };
+
+    const busOptions = {
+        color: '#f0f062',
+        weight: 0.1,
+        opacity: 1
+    };
+
+    const tramOptions = {
+        color: '#ff6e00',
+        weight: 2
+    };
+
+    const otherRoutes = {
+        color: '#ff6e00'
+    };
+
+    $.when(
+        $.getJSON('data/atlanta-urban.json'),
+        $.getJSON('data/city-limits.json'),
+        $.getJSON('data/neighborhoods-filtered-1.json'),
+        $.getJSON('data/transit-routes-simp.json'),
+    ).done((urbanAreas, cityLimits, neighborhoods, transitRoutes) => {
+        drawMap(urbanAreas, cityLimits, neighborhoods, transitRoutes);
+    });
+
+    function drawMap(urbanAreasData, cityLimitsData, neighborhoodsData, transitRoutesData) {
+        L.geoJson(urbanAreasData, { style: urbanOptions }).addTo(map);
+        L.geoJson(cityLimitsData, { style: cityLimitsOptions }).addTo(map);
+        L.geoJson(neighborhoodsData, { style: neighborhoodOptions }).addTo(map);
+        L.geoJson(transitRoutesData, { style: (feature) => {
+                let type = feature.properties.rte_type;
+                console.log(type);
+                return type === 'subway, metro' ? subwayOptions :
+                    type === 'bus' ? busOptions :
+                        type === 'tram, light rail, streetcar' ? tramOptions :
+                            otherRoutes;
             }
-        </style>
-    </head>
-
-    <body>
-        <div id="map"></div>
-
-        <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
-        <script src="https://d3js.org/d3.v5.min.js"></script>
-
-        <script>
-            const options = {
-                center: [33.726, -84.365],
-                zoom: 9,
-                minZoom: 9,
-                maxZoom: 16,
-                maxBounds: [[33.911, -84.032], [33.62, -84.772]]
-            };
-
-            const map = L.map("map", options);
-
-            L.tileLayer(
-                "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
-                {
-                    attribution:
-                        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-                    subdomains: "abcd",
-                    maxZoom: 19
-                }
-            ).addTo(map);
-
-            // deferred requests for all the data files
-            const urbanAreasJson = d3.json('data/urban-areas.json');
-            const cityLimitsJson = d3.json('data/city-limits.json');
-            const neighborhoodsJson = d3.json('data/neighborhoods.json');
-            const transitRoutesJson = d3.json('data/transit-routes.json');
-
-            function drawMap(json) {
-                L.geoJson(json).addTo(map);
-            }
-
-
-            // when they're all loaded and available, send data to drawMap function
-            Promise.all([urbanAreasJson, cityLimitsJson, neighborhoodsJson, transitRoutesJson]).then(drawMap);
-        </script>
-    </body>
+        }).addTo(map);
+    }
+</script>
+</body>
 </html>
