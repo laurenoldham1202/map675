@@ -22,6 +22,7 @@
         <div id="map"></div>
 
         <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
 
         <script>
             const options = {
@@ -43,6 +44,20 @@
                     maxZoom: 19
                 }
             ).addTo(map);
+
+            // deferred requests for all the data files
+            const urbanAreasJson = d3.json('data/urban-areas.json');
+            const cityLimitsJson = d3.json('data/city-limits.json');
+            const neighborhoodsJson = d3.json('data/neighborhoods.json');
+            const transitRoutesJson = d3.json('data/transit-routes.json');
+
+            function drawMap(json) {
+                L.geoJson(json).addTo(map);
+            }
+
+
+            // when they're all loaded and available, send data to drawMap function
+            Promise.all([urbanAreasJson, cityLimitsJson, neighborhoodsJson, transitRoutesJson]).then(drawMap);
         </script>
     </body>
 </html>
