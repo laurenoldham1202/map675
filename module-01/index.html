@@ -188,6 +188,13 @@
             padding: 0;
             background: rgba(0, 0, 0, 0.75);
         }
+
+        .tooltip {
+            color: white;
+            background: #295b97;
+            border: 0;
+            font-size: 1.3em;
+        }
     </style>
 </head>
 
@@ -209,6 +216,18 @@
         maxBounds: [[33.911, -84.032], [33.62, -84.772]]
     };
     const map = L.map('map', options);
+
+    map.createPane('labels');
+    map.getPane('labels').style.zindex = 650;
+    map.getPane('labels').style.pointerEvents = 'none';
+
+    L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',
+        {
+            attribution: '©OpenStreetMap, ©CartoDB',
+            pane: 'labels',
+        }
+    ).addTo(map);
 
     // styling options
     const urbanOptions = {
@@ -264,10 +283,28 @@
     function drawMap(urbanAreasData, cityLimitsData, neighborhoodsData, transitRoutesData) {
         L.geoJson(urbanAreasData, { style: urbanOptions }).addTo(map);
         L.geoJson(cityLimitsData, { style: cityLimitsOptions }).addTo(map);
-        L.geoJson(neighborhoodsData, { style: neighborhoodOptions }).addTo(map);
+        L.geoJson(neighborhoodsData, {
+            style: neighborhoodOptions,
+            onEachFeature: (feature, layer) => {
+                let tooltip = feature.properties.NEIGHBORHO;
+                layer.bindTooltip(tooltip, {
+                    sticky: true,
+                    className: 'tooltip'
+                });
+
+                layer.on('mouseover', function(e) {
+                    this.setStyle({
+                        fillOpacity: 0.1
+                    });
+                });
+
+                layer.on('mouseout', function(e) {
+                    this.setStyle(neighborhoodOptions);
+                });
+            }
+        }).addTo(map);
         L.geoJson(transitRoutesData, { style: (feature) => {
                 let type = feature.properties.rte_type;
-                console.log(type);
                 return type === 'subway, metro' ? subwayOptions :
                     type === 'bus' ? busOptions :
                         type === 'tram, light rail, streetcar' ? tramOptions :
